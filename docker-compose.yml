@@ -1,0 +1,43 @@
+services:
+  xm-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/usr/src/app
+
+
+#  start MariaDB, and ensure that data is stored to a mounted volume
+  # mariadb:
+  #   image: 'mariadb:10'
+  #   ports:
+  #     - "3306:3306"
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: password
+  #     MYSQL_DATABASE: chrisis_home
+  #     MYSQL_USER: mariadb
+  #     MYSQL_PASSWORD: myverysecretpassword
+  #   volumes:
+  #     - ./db-data/mariadb:/var/lib/mysql
+  #     - ./sql/xmapi.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+
+  # postgres:
+  #   image: 'postgres:15.8'
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: myverysecretpassword
+  #     POSTGRES_DB: chrisis_home
+  #   logging:
+  #     options:
+  #       max-size: 10m
+  #       max-file: "3"
+  #   ports:
+  #     - '5432:5432'
+  #   volumes:
+  #     - ./db-data/postgres:/var/lib/postgresql/data
+  #     - ./sql/xmapi.sql:/docker-entrypoint-initdb.d/create_tables.sql
