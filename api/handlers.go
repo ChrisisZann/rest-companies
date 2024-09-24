@@ -211,10 +211,13 @@ func (a *api) user(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		log.Printf("Created token: %v for user: %v", token, username)
-		// w.Header().Set("Content-Type","application/json")
-		json.NewEncoder(w).Encode(map[string]string{"token": token})
 
-		// _ = t.WriteJSON(w, http.StatusCreated, username)
+		e := events.Event{Type: "register", Payload: []byte(username)}
+		a.hub.PublishEventOnLocal(e)
+		a.internalPublisher.WriteStreamToWS(e)
+
+		json.NewEncoder(w).Encode(map[string]string{"token": token})
+		return
 
 	default:
 		http.Error(w, "Bad Request", http.StatusBadRequest)
@@ -250,10 +253,7 @@ func (a *api) login(w http.ResponseWriter, r *http.Request) {
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 			return
 		}
-		// e := events.Event{
-		// 	Type:    "login",
-		// 	Payload: []byte(username),
-		// }
+
 		e := events.Event{Type: "login", Payload: []byte(username)}
 		a.hub.PublishEventOnLocal(e)
 		a.internalPublisher.WriteStreamToWS(e)
