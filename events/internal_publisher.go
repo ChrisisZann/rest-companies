@@ -9,6 +9,6 @@ func NewPublisher(h *Hub) *InternalPublisher {
 }
 
 // used for publishing to websocket
-func (c *InternalPublisher) WriteStream(event Event) {
+func (c *InternalPublisher) WriteStreamToWS(event Event) {
 	c.hub.broadcast <- []byte(event.String())
 }

@@ -65,7 +65,7 @@ func (c *Client) readStream() {
 	}
 }
 
-func (c *Client) writeStream() {
+func (c *Client) WriteStreamToWS() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
@@ -123,6 +123,6 @@ func ServeWS(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	}
 	client.hub.register <- client
 
-	go client.writeStream()
-	go client.readStream()
+	go client.WriteStreamToWS()
+	// go client.readStream()
 }
