@@ -6,6 +6,7 @@ import "database/sql"
 // Repository interface
 // --------------------------------------------------------------------------------
 type Repository interface {
+	// Company
 	CreateNewCompany(name, description, ct string, amountOfEmployees int, registered bool) error
 	DeleteCompany(name string) error
 	PatchCompanyName(name, input string) error
@@ -15,6 +16,7 @@ type Repository interface {
 	PatchCompanyType(name, input string) error
 	SelectSingleCompany(name string) (Company, error)
 
+	// User
 	CreateNewUser(username, password string) error
 	ValidateUser(username, password string) error
 }
@@ -23,8 +25,7 @@ type Repository interface {
 // postgres repository
 // --------------------------------------------------------------------------------
 type psqlRepo struct {
-	DB     *sql.DB
-	tokens []string
+	DB *sql.DB
 }
 
 // psqlRepo implements Repository
@@ -37,14 +38,14 @@ func newPsqlRepo(conn *sql.DB) Repository {
 // ================================================================================
 // test repository
 // --------------------------------------------------------------------------------
-// type testRepository struct {
-// 	DB *sql.DB
-// }
+type testRepository struct {
+	DB *sql.DB
+}
 
-// func newTestRepository(conn *sql.DB) Repository {
-// 	return &testRepository{
-// 		DB: nil,
-// 	}
-// }
+func newTestRepository(conn *sql.DB) Repository {
+	return &testRepository{
+		DB: nil,
+	}
+}
 
 // ================================================================================

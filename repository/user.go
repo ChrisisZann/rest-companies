@@ -8,7 +8,7 @@ import (
 type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
-	Token    string `json:token`
+	Token    string `json:"token"`
 }
 
 func (s *Company) CreateNewUser(username, password string) error {
@@ -66,15 +66,11 @@ func (thisRepo *psqlRepo) ValidateUser(username, password string) error {
 	)
 	if err != nil {
 		log.Println("ValidateUser() :  rows.Scan : ", err)
-		return errors.New("wrong username" + username)
+		return errors.New("Failed to validate user, wrong username" + username)
 	}
 
 	if user.Password != password {
 		return errors.New("wrong password" + password)
-	}
-	// claims, err := ValidateJWT(token, jwtKey)
-	if err != nil {
-		return errors.New("Failed to validate user")
 	}
 	log.Println("Validated user:", username)
 

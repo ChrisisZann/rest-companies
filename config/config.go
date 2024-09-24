@@ -49,5 +49,7 @@ func (a *Application) LoadConfig(configFile string) {
 	}
 
 	a.JwtKey = []byte(jwtKey)
+
+	// Bad practise :)
 	log.Println("loaded jwt key:", a.JwtKey)
 }
