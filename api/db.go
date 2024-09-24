@@ -16,18 +16,6 @@ type dbConfig struct {
 
 func connectToDB(conf dbConfig) *sql.DB {
 
-	// Capture connection properties?
-	// cfg := mysql.Config{
-	// 	User:   "postgres",
-	// 	Passwd: "4tE_pale",
-	//  Net:    "tcp",
-	// 	Addr:   "192.168.1.5",
-	// 	DBName: "chrisis_home",
-	// }
-
-	// Replace the connection string with your actual PostgreSQL connection string
-	// db, err := sql.Open("postgres", "postgres://postgres:4tE_pale@192.168.1.5/chrisis_home?sslmode=disable")
-
 	options := "sslmode=disable"
 	dataSourceName := "postgres://" + conf.db_user + ":" + conf.db_password + "@" + conf.db_host + "/" + conf.db_name + "?" + options
 	db, err := sql.Open("postgres", dataSourceName)

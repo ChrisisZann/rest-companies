@@ -1,7 +1,3 @@
 {
-    "jwt_key": "best_key_ever",
-    "db_user": "postgres",
-    "db_password": "myverysecretpassword",
-    "db_host": "host.docker.internal",
-    "db_name": "docker_home"
+    "jwt_key": "best_key_ever"
 }

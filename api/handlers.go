@@ -34,7 +34,7 @@ func (a *api) company(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		company, err := a.config.Models.Company.SelectSingleCompany(name)
+		company, err := a.cfg.Models.Company.SelectSingleCompany(name)
 		if err != nil {
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest) // http.NotFound(w, r)
 		}
@@ -81,7 +81,7 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 		}
 
-		err = a.config.Models.Company.CreateNewCompany(name, description, companyType, i_amountOfEmployees, b_registered)
+		err = a.cfg.Models.Company.CreateNewCompany(name, description, companyType, i_amountOfEmployees, b_registered)
 		if err != nil {
 			log.Println("ERROR:", err)
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest)
@@ -114,13 +114,13 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 
 		switch field {
 		case "name":
-			err := a.config.Models.Company.PatchCompanyName(name, value)
+			err := a.cfg.Models.Company.PatchCompanyName(name, value)
 			if err != nil {
 				_ = t.ErrorJSON(w, err, http.StatusBadRequest) // http.NotFound(w, r)
 			}
 			_ = t.WriteJSON(w, http.StatusOK, "patched with new name: "+value)
 		case "description":
-			err := a.config.Models.Company.PatchCompanyDescription(name, value)
+			err := a.cfg.Models.Company.PatchCompanyDescription(name, value)
 			if err != nil {
 				_ = t.ErrorJSON(w, err, http.StatusBadRequest) // http.NotFound(w, r)
 			}
@@ -133,7 +133,7 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			err = a.config.Models.Company.PatchCompanyAmtEmp(name, i_value)
+			err = a.cfg.Models.Company.PatchCompanyAmtEmp(name, i_value)
 			if err != nil {
 				_ = t.ErrorJSON(w, err, http.StatusBadRequest) // http.NotFound(w, r)
 			}
@@ -144,12 +144,12 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 				_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 			}
 
-			err = a.config.Models.Company.PatchCompanyReg(name, b_value)
+			err = a.cfg.Models.Company.PatchCompanyReg(name, b_value)
 			if err != nil {
 				_ = t.ErrorJSON(w, err, http.StatusBadRequest) // http.NotFound(w, r)
 			}
 		case "type":
-			err := a.config.Models.Company.PatchCompanyName(name, value)
+			err := a.cfg.Models.Company.PatchCompanyName(name, value)
 			if err != nil {
 				_ = t.ErrorJSON(w, err, http.StatusBadRequest) // http.NotFound(w, r)
 			}
@@ -161,14 +161,14 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 		var t toolbox.Tools
 		name := r.URL.Query().Get("name")
 
-		err := a.config.Models.Company.DeleteCompany(name)
+		err := a.cfg.Models.Company.DeleteCompany(name)
 		if err != nil {
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest) // http.NotFound(w, r)
 		}
 
 		e := events.Event{Type: "delete", Payload: []byte(name)}
-		a.hub.PublishEvent(e)
-		a.internalPublisher.WriteStream(e)
+		a.hub.PublishEventOnLocal(e)
+		a.internalPublisher.WriteStreamToWS(e)
 
 		_ = t.WriteJSON(w, http.StatusOK, "deleted "+name)
 
@@ -193,13 +193,13 @@ func (a *api) user(w http.ResponseWriter, r *http.Request) {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 
-		err = a.config.Models.Company.CreateNewUser(username, password)
+		err = a.cfg.Models.Company.CreateNewUser(username, password)
 		if err != nil {
 			log.Println("ERROR:", err)
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 			return
 		}
-		token, err := GenerateJWT(username, a.config.JwtKey)
+		token, err := GenerateJWT(username, a.cfg.JwtKey)
 		if err != nil {
 			log.Println("Failed to generate token")
 			return
@@ -238,7 +238,7 @@ func (a *api) login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = a.config.Models.Company.ValidateUser(username, password)
+		err = a.cfg.Models.Company.ValidateUser(username, password)
 		if err != nil {
 			log.Println("ERROR:", err)
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest)
@@ -249,8 +249,8 @@ func (a *api) login(w http.ResponseWriter, r *http.Request) {
 		// 	Payload: []byte(username),
 		// }
 		e := events.Event{Type: "login", Payload: []byte(username)}
-		a.hub.PublishEvent(e)
-		a.internalPublisher.WriteStream(e)
+		a.hub.PublishEventOnLocal(e)
+		a.internalPublisher.WriteStreamToWS(e)
 
 		_ = t.WriteJSON(w, http.StatusAccepted, "successful validation")
 
@@ -280,7 +280,7 @@ func (a *api) Auth(next http.Handler) http.Handler {
 
 		// log.Println("Auth(): Parsing XmClaims:", str_token)
 
-		claims, err := ValidateJWT(str_token, a.config.JwtKey)
+		claims, err := ValidateJWT(str_token, a.cfg.JwtKey)
 		if err != nil {
 			log.Println("error:", err)
 			return
