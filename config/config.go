@@ -52,33 +52,33 @@ func (a *Application) LoadConfig(configFile string) {
 	}
 	a.JwtKey = []byte(jwtKey)
 
-	db_user, ok := dat["db_user"].(string)
-	if !ok {
-		log.Fatalf("db_user is not a string")
-	}
+	// db_user, ok := dat["db_user"].(string)
+	// if !ok {
+	// 	log.Fatalf("db_user is not a string")
+	// }
 
-	db_password, ok := dat["db_password"].(string)
-	if !ok {
-		log.Fatalf("db_password is not a string")
-	}
+	// db_password, ok := dat["db_password"].(string)
+	// if !ok {
+	// 	log.Fatalf("db_password is not a string")
+	// }
 
-	db_host, ok := dat["db_host"].(string)
-	if !ok {
-		log.Fatalf("db_host is not a string")
-	}
+	// db_host, ok := dat["db_host"].(string)
+	// if !ok {
+	// 	log.Fatalf("db_host is not a string")
+	// }
 
-	db_name, ok := dat["db_name"].(string)
-	if !ok {
-		log.Fatalf("db_name is not a string")
-	}
+	// db_name, ok := dat["db_name"].(string)
+	// if !ok {
+	// 	log.Fatalf("db_name is not a string")
+	// }
 
-	a.SqlCfg = &mysql.Config{
-		User:   db_user,
-		Passwd: db_password,
-		Net:    "tcp",
-		Addr:   db_host,
-		DBName: db_name,
-	}
+	// a.SqlCfg = &mysql.Config{
+	// 	User:   db_user,
+	// 	Passwd: db_password,
+	// 	Net:    "tcp",
+	// 	Addr:   db_host,
+	// 	DBName: db_name,
+	// }
 	// Bad practise :)
 	// log.Println("loaded jwt key:", a.JwtKey)
 }
