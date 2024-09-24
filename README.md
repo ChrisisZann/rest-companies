@@ -43,7 +43,7 @@ git clone https://github.com/chrisisZann/xm-companies.git
 - Run as standalone service
 ```bash
 docker build .
-docker run -it --name xmapi -p 8080:8888 <container-image>
+docker run -it --name xmapi -p <host_port>:8888 <container-image>
 ```
 
 - Run with docker compose
