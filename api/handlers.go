@@ -88,9 +88,10 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		_ = t.WriteJSON(w, http.StatusCreated, nil)
-		// w.WriteHeader(http.StatusCreated)
-
-	// case "PUT":
+		e := events.Event{Type: "post", Payload: []byte(name)}
+		a.hub.PublishEventOnLocal(e)
+		a.internalPublisher.WriteStreamToWS(e)
+		return
 
 	case "PATCH":
 		var t toolbox.Tools
@@ -155,6 +156,11 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 			}
 		default:
 			_ = t.ErrorJSON(w, errors.New("invalid field:"+field), http.StatusBadRequest) // http.NotFound(w, r)
+
+			e := events.Event{Type: "patch", Payload: []byte(field + ";" + value)}
+			a.hub.PublishEventOnLocal(e)
+			a.internalPublisher.WriteStreamToWS(e)
+
 		}
 
 	case "DELETE":
