@@ -30,6 +30,17 @@ add in Dockerfile by modifiying
 
 CMD ["/usr/local/bin/xmapi/api","-c","example_file.json"]
 
+example:
+```json
+{
+    "jwt_key": "best_key_ever",
+    "db_user": "postgres",
+    "db_password": "myverysecretpassword",
+    "db_host": "host.docker.internal",
+    "db_name": "docker_home"
+}
+```
+
 ## Installation
 
 Download project:
