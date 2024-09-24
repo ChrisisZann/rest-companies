@@ -79,7 +79,6 @@ func (a *Application) LoadConfig(configFile string) {
 		Addr:   db_host,
 		DBName: db_name,
 	}
-
 	// Bad practise :)
 	// log.Println("loaded jwt key:", a.JwtKey)
 }

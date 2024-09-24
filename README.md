@@ -9,6 +9,7 @@ a small service to create, patch, delete and get companies
 - Installation
 - Run as docker container
 - Testing Examples
+- Events
 
 ## Dependencies
 
@@ -95,3 +96,8 @@ Delete company field
 curl -X DELETE  -H "Authorization: Bearer <your_token>"\
 "http::/127.0.0.1:8888/auth-company?name=<COMPANY_NAME>"
 ```
+
+## Events
+
+Connect to websocket to listen to mutating events
+ws://127.0.0.1:port/ws
