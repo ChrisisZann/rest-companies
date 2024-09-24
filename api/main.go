@@ -35,25 +35,23 @@ func main() {
 	db_conf := dbConfig{
 		db_user:     "postgres",
 		db_password: "myverysecretpassword",
-		db_host:     "127.0.0.1",
+		db_host:     "host.docker.internal",
 		db_name:     "docker_home",
 	}
 
-	chr_api := api{
+	companies_api := api{
 		config: config.New(connectToDB(db_conf)),
 		hub:    events.NewHub(),
 	}
-	chr_api.internalPublisher = events.NewPublisher(chr_api.hub)
+	companies_api.internalPublisher = events.NewPublisher(companies_api.hub)
+	companies_api.config.LoadConfig(*cfgFile)
+	go companies_api.hub.Run()
 
-	chr_api.config.LoadConfig(*cfgFile)
-
-	go chr_api.hub.Run()
-
-	log.Printf("Loaded from cfg file, key: %s", chr_api.config.JwtKey)
+	log.Println("Loaded jwt key from cfg file")
 
 	srv := &http.Server{
 		Addr:              port,
-		Handler:           chr_api.router(),
+		Handler:           companies_api.router(),
 		IdleTimeout:       30 * time.Second,
 		ReadTimeout:       30 * time.Second,
 		ReadHeaderTimeout: 30 * time.Second,

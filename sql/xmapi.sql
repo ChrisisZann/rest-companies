@@ -1,6 +1,6 @@
 
 
-CREATE DATABASE chrisis_home
+CREATE DATABASE docker_home
     WITH
     OWNER = postgres
     ENCODING = 'UTF8'
