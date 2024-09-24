@@ -9,7 +9,9 @@ a small service to create, patch, delete and get companies
 - Installation
 - Run as docker container
 - Testing Examples
+- Usage
 - Events
+
 
 ## Dependencies
 
@@ -35,10 +37,6 @@ example:
 ```json
 {
     "jwt_key": "best_key_ever",
-    "db_user": "postgres",
-    "db_password": "myverysecretpassword",
-    "db_host": "host.docker.internal",
-    "db_name": "docker_home"
 }
 ```
 
@@ -96,8 +94,16 @@ Delete company field
 curl -X DELETE  -H "Authorization: Bearer <your_token>"\
 "http::/127.0.0.1:8888/auth-company?name=<COMPANY_NAME>"
 ```
+## Usage
+
+1. Create user by sending POST request on /user with parameters username and password
+2. use the JWT in response to access protected endpoints(POST, PATCH, DELETE /company)
+
+if token expires (after 24hours) login to receive new token
+
+GET /company does not require authentication
 
 ## Events
 
-Connect to websocket to listen to mutating events
+Connect via websocket to listen to mutating events of the microservice
 ws://127.0.0.1:port/ws
