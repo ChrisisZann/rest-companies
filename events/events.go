@@ -6,12 +6,16 @@ import (
 )
 
 type Event struct {
-	Type      string      `json:"type"`
-	Payload   interface{} `json:"payload"`
-	Timestamp time.Time   `json:"timestamp"`
+	Type      string    `json:"type"`
+	Payload   []byte    `json:"payload"`
+	Timestamp time.Time `json:"timestamp"`
 }
 
-func NewEvent(eventType string, payload interface{}) Event {
+func (e *Event) String() string {
+	return e.Type + ";" + string(e.Payload) + ";" + e.Timestamp.String()
+}
+
+func (h *Hub) NewEvent(eventType string, payload []byte) Event {
 	return Event{
 		Type:      eventType,
 		Payload:   payload,
@@ -19,6 +23,6 @@ func NewEvent(eventType string, payload interface{}) Event {
 	}
 }
 
-func PublishEvent(event Event) {
-	log.Printf("Event published: Type=%s Payload=%s Timestamp=%v", event.Type, event.Payload, event.Timestamp)
+func (h *Hub) PublishEvent(event Event) {
+	log.Printf("New Event: %s", event)
 }

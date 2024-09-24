@@ -43,8 +43,13 @@ type testRepository struct {
 }
 
 func newTestRepository(conn *sql.DB) Repository {
+	if conn == nil {
+		return &testRepository{
+			DB: nil,
+		}
+	}
 	return &testRepository{
-		DB: nil,
+		DB: conn,
 	}
 }
 

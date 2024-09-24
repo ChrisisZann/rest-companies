@@ -107,6 +107,9 @@ func (c *Client) writeStream() {
 }
 
 func ServeWS(hub *Hub, w http.ResponseWriter, r *http.Request) {
+
+	log.Println("adding new client to hub")
+
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)

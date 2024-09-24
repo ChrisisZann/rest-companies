@@ -14,8 +14,9 @@ const port = ":8888"
 var cfgFile = flag.String("c", "config.json", "configuration file")
 
 type api struct {
-	config *config.Application
-	hub    *events.Hub
+	config            *config.Application
+	hub               *events.Hub
+	internalPublisher *events.InternalPublisher
 }
 
 func main() {
@@ -34,6 +35,7 @@ func main() {
 		config: config.New(connectToDB(db_conf)),
 		hub:    events.NewHub(),
 	}
+	chr_api.internalPublisher = events.NewPublisher(chr_api.hub)
 
 	chr_api.config.LoadConfig(*cfgFile)
 

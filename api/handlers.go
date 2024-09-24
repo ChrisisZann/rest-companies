@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"xm-companies/events"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/tsawler/toolbox"
@@ -165,6 +166,10 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest) // http.NotFound(w, r)
 		}
 
+		e := events.Event{Type: "delete", Payload: []byte(name)}
+		a.hub.PublishEvent(e)
+		a.internalPublisher.WriteStream(e)
+
 		_ = t.WriteJSON(w, http.StatusOK, "deleted "+name)
 
 	default:
@@ -239,6 +244,13 @@ func (a *api) login(w http.ResponseWriter, r *http.Request) {
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 			return
 		}
+		// e := events.Event{
+		// 	Type:    "login",
+		// 	Payload: []byte(username),
+		// }
+		e := events.Event{Type: "login", Payload: []byte(username)}
+		a.hub.PublishEvent(e)
+		a.internalPublisher.WriteStream(e)
 
 		_ = t.WriteJSON(w, http.StatusAccepted, "successful validation")
 
