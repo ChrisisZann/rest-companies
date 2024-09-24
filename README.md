@@ -54,30 +54,33 @@ docker compose up -d
 
 Create user
 ```bash
-curl -X POST http://192.168.1.11:8888/user?username=<USERNAME>&password=<PASSWORD>
+curl -X POST "http::/127.0.0.1:8888/user?username=<USERNAME>&password=<PASSWORD>"
 ```
 
 Login
 ```bash
-curl -X POST http://192.168.1.11:8888/login?username=<USERNAME>&password=<PASSWORD>
+curl -X POST "http::/127.0.0.1:8888/login?username=<USERNAME>&password=<PASSWORD>"
 ```
 
 Create company
 ```bash
-curl -X POST http://192.168.1.11:8888/auth-company?name=<value>&description=<value>&registered=<value>&type=<value>&amount_of_employees=<value> -H "Authorization: Bearer <your_token>"
+curl -X POST -H "Authorization: Bearer <your_token>"\
+"http::/127.0.0.1:8888/auth-company?name=<value>&description=<value>&registered=<value>&type=<value>&amount_of_employees=<value>" 
 ```
 
 Find company
 ```bash
-curl -X GET http://192.168.1.11:8888/company?name=<COMPANY_NAME>
+curl -X GET "http::/127.0.0.1:8888/company?name=<COMPANY_NAME>"
 ````
 
 Patch company field
 ```bash
-curl -X PATCH http://192.168.1.11:8888/auth-company?name=<COMPANY_NAME>&field=<key>&value=<value> -H "Authorization: Bearer <your_token>"
+curl -X PATCH -H "Authorization: Bearer <your_token>"\
+"http::/127.0.0.1:8888/auth-company?name=<COMPANY_NAME>&field=<key>&value=<value>" 
 ```
 
 Delete company field
 ```bash
-curl -X DELETE http://192.168.1.11:8888/auth-company?name=<COMPANY_NAME> -H "Authorization: Bearer <your_token>"
+curl -X DELETE  -H "Authorization: Bearer <your_token>"\
+"http::/127.0.0.1:8888/auth-company?name=<COMPANY_NAME>"
 ```
