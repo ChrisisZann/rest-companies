@@ -8,9 +8,9 @@ a small service to create, patch, delete and get companies
 - Configuration file
 - Installation
 - Run as docker container
-- Testing Examples
 - Usage
 - Events
+- Testing Examples
 
 
 ## Dependencies
@@ -60,6 +60,21 @@ docker run -it --name xmapi -p <host_port>:8888 <container-image>
 ```bash
 docker compose up -d
 ```
+
+## Usage
+
+1. Create user by sending POST request on /user with parameters username and password
+2. use the JWT in response to access protected endpoints(POST, PATCH, DELETE /company)
+
+if token expires (after 24hours) login to receive new token
+
+GET /company does not require authentication
+
+## Events
+
+Connect via websocket to listen to mutating events of the microservice
+ws://127.0.0.1:port/ws
+
 ## Testing Examples
 
 Create user
@@ -94,16 +109,3 @@ Delete company field
 curl -X DELETE  -H "Authorization: Bearer <your_token>"\
 "http::/127.0.0.1:8888/auth-company?name=<COMPANY_NAME>"
 ```
-## Usage
-
-1. Create user by sending POST request on /user with parameters username and password
-2. use the JWT in response to access protected endpoints(POST, PATCH, DELETE /company)
-
-if token expires (after 24hours) login to receive new token
-
-GET /company does not require authentication
-
-## Events
-
-Connect via websocket to listen to mutating events of the microservice
-ws://127.0.0.1:port/ws
