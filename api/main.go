@@ -24,21 +24,6 @@ func main() {
 	flag.Parse()
 	log.Println("Input config:", *cfgFile)
 
-	// db_conf := dbConfig{
-	// 	db_user:     "postgres",
-	// 	db_password: "4tE_pale",
-	// 	db_host:     "192.168.1.5",
-	// 	db_name:     "chrisis_home",
-	// }
-
-	// docker postgres
-	db_conf := dbConfig{
-		db_user:     "postgres",
-		db_password: "myverysecretpassword",
-		db_host:     "host.docker.internal",
-		db_name:     "docker_home",
-	}
-
 	companies_api := api{
 		config: config.New(connectToDB(db_conf)),
 		hub:    events.NewHub(),

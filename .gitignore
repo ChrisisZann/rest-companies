@@ -37,3 +37,4 @@ db-data/postgres/pg_hba.conf
 
 
 macos_notes.sh
+config_rpi.json
