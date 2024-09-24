@@ -4,8 +4,17 @@ a small service to create, patch, delete and get companies
 
 ## Table of Contents
 
+- Dependencies
 - Configuration file
 - Installation
+
+## Dependencies
+
+github.com/golang-jwt/jwt/v5
+github.com/google/uuid
+github.com/gorilla/websocket
+github.com/lib/pq
+github.com/tsawler/toolbox
 
 ## Configuration file
 

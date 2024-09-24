@@ -16,7 +16,7 @@ type dbConfig struct {
 
 func connectToDB(conf dbConfig) *sql.DB {
 
-	// Capture connection properties.
+	// Capture connection properties?
 	// cfg := mysql.Config{
 	// 	User:   "postgres",
 	// 	Passwd: "4tE_pale",

@@ -1,6 +1,9 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+	"xm-companies/events"
+)
 
 func (api *api) router() http.Handler {
 	mux := http.NewServeMux()
@@ -14,6 +17,10 @@ func (api *api) router() http.Handler {
 	mux.HandleFunc("/login", api.login)
 
 	mux.Handle("/auth-login", api.Auth(http.HandlerFunc(api.ProtectedEndpoint)))
+
+	mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		events.ServeWS(api.hub, w, r)
+	})
 
 	return mux
 

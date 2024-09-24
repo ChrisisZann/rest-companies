@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 	"xm-companies/config"
+	"xm-companies/events"
 )
 
 const port = ":8888"
@@ -14,6 +15,7 @@ var cfgFile = flag.String("c", "config.json", "configuration file")
 
 type api struct {
 	config *config.Application
+	hub    *events.Hub
 }
 
 func main() {
@@ -30,9 +32,12 @@ func main() {
 
 	chr_api := api{
 		config: config.New(connectToDB(db_conf)),
+		hub:    events.NewHub(),
 	}
 
 	chr_api.config.LoadConfig(*cfgFile)
+
+	go chr_api.hub.Run()
 
 	log.Printf("Loaded from cfg file, key: %s", chr_api.config.JwtKey)
 
