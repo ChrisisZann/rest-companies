@@ -30,4 +30,10 @@ notes.txt
 .DS_Store
 config.json
 
-test change
+
+db-data/*
+db-data/*/*
+db-data/postgres/pg_hba.conf
+
+
+macos_notes.sh

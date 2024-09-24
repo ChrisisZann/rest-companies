@@ -24,11 +24,19 @@ func main() {
 	flag.Parse()
 	log.Println("Input config:", *cfgFile)
 
+	// db_conf := dbConfig{
+	// 	db_user:     "postgres",
+	// 	db_password: "4tE_pale",
+	// 	db_host:     "192.168.1.5",
+	// 	db_name:     "chrisis_home",
+	// }
+
+	// docker postgres
 	db_conf := dbConfig{
 		db_user:     "postgres",
-		db_password: "4tE_pale",
-		db_host:     "192.168.1.5",
-		db_name:     "chrisis_home",
+		db_password: "myverysecretpassword",
+		db_host:     "127.0.0.1",
+		db_name:     "docker_home",
 	}
 
 	chr_api := api{
