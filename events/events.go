@@ -23,6 +23,7 @@ func (h *Hub) NewEvent(eventType string, payload []byte) Event {
 	}
 }
 
+// used for publishing to stdout
 func (h *Hub) PublishEvent(event Event) {
 	log.Printf("New Event: %s", event)
 }

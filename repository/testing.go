@@ -1,7 +1,6 @@
 package repository
 
 func (thisRepo *testRepository) CreateNewCompany(name, description, ct string, amountOfEmployees int, registered bool) error {
-
 	return nil
 }
 
@@ -35,11 +34,9 @@ func (thisRepo *testRepository) SelectSingleCompany(name string) (Company, error
 }
 
 func (thisRepo *testRepository) CreateNewUser(username, password string) error {
-
 	return nil
 }
 
 func (thisRepo *testRepository) ValidateUser(username, password string) error {
-
 	return nil
 }

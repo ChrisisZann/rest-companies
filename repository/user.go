@@ -32,15 +32,6 @@ func (thisRepo *psqlRepo) CreateNewUser(username, password string) error {
 	if rowsAffected == 0 {
 		return errors.New("failed to create new user")
 	}
-
-	// token, err := GenerateJWT(username, jwtKey)
-	// if err != nil {
-	// 	return &User{}, err
-	// }
-	// thisRepo.tokens = append(thisRepo.tokens, token)
-	// log.Printf("Saved token: %v for user: %v", token, username)
-
-	// return &User{Username: username, Password: "******", Token: token}, nil
 	return nil
 }
 
@@ -76,41 +67,3 @@ func (thisRepo *psqlRepo) ValidateUser(username, password string) error {
 
 	return nil
 }
-
-// type Claims struct {
-// 	Username string `json:"username"`
-// 	jwt.RegisteredClaims
-// }
-
-// func GenerateJWT(username string, signingKey []byte) (string, error) {
-// 	claims := Claims{
-// 		username,
-// 		jwt.RegisteredClaims{
-// 			// A usual scenario is to set the expiration time relative to the current time
-// 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
-// 			IssuedAt:  jwt.NewNumericDate(time.Now()),
-// 			NotBefore: jwt.NewNumericDate(time.Now()),
-// 			Issuer:    username,
-// 			Subject:   "companies",
-// 		},
-// 	}
-// 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-// 	ss, err := token.SignedString(signingKey)
-// 	return ss, err
-
-// }
-
-// func ValidateJWT(str_token string, privateKey []byte) (*Claims, error) {
-// 	claims := &Claims{}
-// 	token, err := jwt.ParseWithClaims(str_token, claims, func(token *jwt.Token) (interface{}, error) {
-// 		return privateKey, nil
-// 	})
-// 	if err != nil {
-// 		log.Println("error in ValidateJWT() : ParseWithClaims()", err)
-// 		return nil, err
-// 	} else if !token.Valid {
-// 		return nil, errors.New("Invalid token")
-// 	}
-// 	return claims, nil
-// }
