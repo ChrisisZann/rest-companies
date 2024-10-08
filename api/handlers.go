@@ -16,8 +16,6 @@ import (
 	"github.com/tsawler/toolbox"
 )
 
-// type MiddlewareSrv struct{}
-
 func (a *api) rootHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello There, this is the root response from xm-company-api!")
 }
