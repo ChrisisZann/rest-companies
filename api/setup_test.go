@@ -14,7 +14,7 @@ func TestMain(m *testing.M) {
 	log.Println("initializing testApp")
 
 	testApp = api{
-		cfg: config.New(nil),
+		cfg: config.New("test"),
 	}
 
 	os.Exit(m.Run())
