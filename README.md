@@ -25,9 +25,9 @@ go get github.com/tsawler/toolbox
 
 ## Configuration file
 
-load configuration file with <-c> option: -c example_file.json
+optionally load configuration file with <-c> option: -c example_file.json
 
-defualt file is config.json
+defualt file name is config.json
 
 add in Dockerfile by modifiying
 
@@ -36,7 +36,11 @@ CMD ["/usr/local/bin/xmapi/api","-c","example_file.json"]
 example:
 ```json
 {
-    "jwt_key": "best_key_ever",
+    "jwt_key": "dummy_key",
+    "db_user": "dummy_username",
+    "db_password": "dummy_password",
+    "db_host": "dummy_hostname",
+    "db_name": "dummy_db_name"
 }
 ```
 
