@@ -4,7 +4,6 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"time"
 )
 
@@ -53,7 +52,7 @@ func parseStringFromCT(input string) (companyType, error) {
 	case "Sole Proprietorship":
 		return SoleProprietorship, nil
 	default:
-		return Undefined, errors.New("error, invalid type")
+		return Undefined, errors.New("invalid company type")
 	}
 }
 
@@ -72,25 +71,32 @@ func (ct *companyType) String() string {
 	}
 }
 
-// UnmarshalJSON custom implementation
 func (t *companyType) UnmarshalJSON(b []byte) error {
 	var s string
 	if err := json.Unmarshal(b, &s); err != nil {
 		return err
 	}
 
-	switch s {
-	case "Corporations":
-		*t = Corporations
-	case "NonProfit":
-		*t = NonProfit
-	case "Cooperative":
-		*t = Cooperative
-	case "Sole Proprietorship":
-		*t = SoleProprietorship
-	default:
-		return fmt.Errorf("invalid company type")
+	// switch s {
+	// case "Corporations":
+	// 	*t = Corporations
+	// case "NonProfit":
+	// 	*t = NonProfit
+	// case "Cooperative":
+	// 	*t = Cooperative
+	// case "Sole Proprietorship":
+	// 	*t = SoleProprietorship
+	// default:
+	// 	return fmt.Errorf("invalid company type")
+	// }
+
+	//2nd way: use of parseStringFromCT, ,to test
+	ct, err := parseStringFromCT(s)
+	if err != nil {
+		return err
 	}
+	*t = ct
+
 	return nil
 }
 

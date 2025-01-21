@@ -114,6 +114,8 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		log.Println("name:" + name + ", field:" + field + ", value:" + value)
+
 		switch field {
 		case "name":
 			err := a.cfg.Models.Company.PatchCompanyName(name, value)
@@ -153,7 +155,7 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 				_ = t.ErrorJSON(w, err, http.StatusBadRequest) // http.NotFound(w, r)
 			}
 		case "type":
-			err := a.cfg.Models.Company.PatchCompanyName(name, value)
+			err := a.cfg.Models.Company.PatchCompanyType(name, value)
 			if err != nil {
 				_ = t.ErrorJSON(w, err, http.StatusBadRequest) // http.NotFound(w, r)
 			}

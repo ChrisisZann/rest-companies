@@ -2,8 +2,9 @@ package repository
 
 import (
 	"errors"
-	"github.com/google/uuid"
 	"log"
+
+	"github.com/google/uuid"
 )
 
 func (thisRepo *psqlRepo) CreateNewCompany(name, description, ct string, amountOfEmployees int, registered bool) error {
@@ -66,7 +67,7 @@ func (thisRepo *psqlRepo) PatchCompanyName(name, input string) error {
 		log.Println("Error in: PatchCompanyName()", err)
 		return err
 	}
-	log.Println("Updates company:", name, "to", input)
+	log.Println("Updates company name:", name, "to", input)
 	return nil
 }
 
@@ -79,7 +80,7 @@ func (thisRepo *psqlRepo) PatchCompanyDescription(name, input string) error {
 		log.Println("Error in: PatchCompanyName()", err)
 		return err
 	}
-	log.Println("Updates company:", name, "to", input)
+	log.Println("Updates company description:", name, "to", input)
 	return nil
 }
 
@@ -92,7 +93,7 @@ func (thisRepo *psqlRepo) PatchCompanyAmtEmp(name string, input int) error {
 		log.Println("Error in: PatchCompanyName()", err)
 		return err
 	}
-	log.Println("Updates company:", name, "to", input)
+	log.Println("Updates company amountOfEmployees:", name, "to", input)
 	return nil
 }
 
@@ -105,7 +106,7 @@ func (thisRepo *psqlRepo) PatchCompanyReg(name string, input bool) error {
 		log.Println("Error in: PatchCompanyName()", err)
 		return err
 	}
-	log.Println("Updates company:", name, "to", input)
+	log.Println("Updates company registered:", name, "to", input)
 	return nil
 }
 
@@ -125,7 +126,7 @@ func (thisRepo *psqlRepo) PatchCompanyType(name, input string) error {
 		log.Println("Error in: PatchCompanyName()", err)
 		return err
 	}
-	log.Println("Updates company:", name, "to", input)
+	log.Println("Updates company type:", name, "to", input)
 	return nil
 }
 

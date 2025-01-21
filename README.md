@@ -83,23 +83,23 @@ ws://127.0.0.1:port/ws
 
 Create user
 ```bash
-curl -X POST "http::/127.0.0.1:8888/user?username=<USERNAME>&password=<PASSWORD>"
+curl -X POST "http://127.0.0.1:8888/user?username=<USERNAME>&password=<PASSWORD>"
 ```
 
 Login
 ```bash
-curl -X POST "http::/127.0.0.1:8888/login?username=<USERNAME>&password=<PASSWORD>"
+curl -X POST "http://127.0.0.1:8888/login?username=<USERNAME>&password=<PASSWORD>"
 ```
 
 Create company
 ```bash
 curl -X POST -H "Authorization: Bearer <your_token>"\
-"http::/127.0.0.1:8888/auth-company?name=<value>&description=<value>&registered=<value>&type=<value>&amount_of_employees=<value>" 
+"http://127.0.0.1:8888/auth-company?name=<value>&description=<value>&registered=<value>&type=<value>&amount_of_employees=<value>" 
 ```
 
 Find company
 ```bash
-curl -X GET "http::/127.0.0.1:8888/company?name=<COMPANY_NAME>"
+curl -X GET "http://127.0.0.1:8888/company?name=<COMPANY_NAME>"
 ````
 
 Patch company field
@@ -111,5 +111,5 @@ curl -X PATCH -H "Authorization: Bearer <your_token>"\
 Delete company field
 ```bash
 curl -X DELETE  -H "Authorization: Bearer <your_token>"\
-"http::/127.0.0.1:8888/auth-company?name=<COMPANY_NAME>"
+"http://127.0.0.1:8888/auth-company?name=<COMPANY_NAME>"
 ```
