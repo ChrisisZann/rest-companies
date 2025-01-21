@@ -328,16 +328,16 @@ func GenerateJWT(username string, signingKey []byte) (string, error) {
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	log.Println("signingKey:", signingKey)
+	// log.Println("signingKey:", signingKey)
 	ss, err := token.SignedString(signingKey)
 	return ss, err
 
 }
 
 func ValidateJWT(str_token string, privateKey []byte) (*XmClaims, error) {
-	log.Println("ValidatingJWT")
-	log.Println("str_token", str_token)
-	log.Println("privateKey", string(privateKey))
+	// log.Println("ValidatingJWT")
+	// log.Println("str_token", str_token)
+	// log.Println("privateKey", string(privateKey))
 
 	var token_only string
 	if strings.Contains(str_token, " ") {
@@ -346,7 +346,7 @@ func ValidateJWT(str_token string, privateKey []byte) (*XmClaims, error) {
 		if len(parts) == 2 {
 			token_only = parts[1]
 			// log.Println("Key:", token_only)
-			log.Println("Ignoring authendication scheme:", parts[0])
+			// log.Println("Ignoring authendication scheme:", parts[0])
 		} else {
 			log.Println("Invalid authorization header format")
 		}
@@ -359,7 +359,7 @@ func ValidateJWT(str_token string, privateKey []byte) (*XmClaims, error) {
 		return privateKey, nil
 	})
 	if err != nil {
-		// log.Println("error in ValidateJWT() : ParseWithClaims()", err)
+		log.Println("error in ValidateJWT() : ParseWithClaims()", err)
 		return nil, err
 	} else if !token.Valid {
 		return nil, errors.New("Invalid token")
