@@ -24,13 +24,8 @@ func main() {
 	flag.Parse()
 	log.Println("Input config:", *cfgFile)
 
-	initializeConfig, err := config.New(*cfgFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	companies_api := api{
-		cfg: initializeConfig,
+		cfg: config.New(*cfgFile),
 		hub: events.NewHub(),
 	}
 
@@ -53,7 +48,8 @@ func main() {
 	log.Println("Starting web application on port", port)
 
 	companies_api.cfg.Logger.Println("Starting Service")
-	err = srv.ListenAndServe()
+
+	err := srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -3,7 +3,6 @@ package config
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -20,42 +19,31 @@ type Application struct {
 }
 
 type inputConfig struct {
-	JwtKey []byte
-	SqlCfg *mysql.Config
+	JwtKey  []byte
+	SqlCfg  *mysql.Config
+	LogFile *os.File
 }
 
 var instance *Application
 var once sync.Once
 var db *sql.DB
 
-func New(configFile string) (*Application, error) {
+func New(configFile string) *Application {
 	inputConfig := LoadConfig(configFile)
 	return GetInstance(inputConfig)
 }
 
-func GetInstance(ic inputConfig) (*Application, error) {
-
-	err := os.MkdirAll("/var/log/xm-companies/", 0755)
-	if err != nil {
-		fmt.Println("Failed to create log directory")
-		return nil, err
-	}
-
-	logFile, err := os.Create("/var/log/xm-companies/service.log")
-	if err != nil {
-		fmt.Println("Failed to create log file")
-		return nil, err
-	}
+func GetInstance(ic inputConfig) *Application {
 
 	once.Do(func() {
 		instance = &Application{
 			Models: repository.New(connectToDB(*ic.SqlCfg)),
 			JwtKey: ic.JwtKey,
-			Logger: log.New(logFile, "", log.Ldate|log.Ltime|log.Lshortfile),
+			Logger: log.New(ic.LogFile, "", log.Ldate|log.Ltime|log.Lshortfile),
 		}
 	})
 
-	return instance, nil
+	return instance
 }
 
 func LoadConfig(configFile string) inputConfig {
@@ -69,30 +57,46 @@ func LoadConfig(configFile string) inputConfig {
 	var dat map[string]interface{}
 	json.Unmarshal(data, &dat)
 
+	logName := "service"
+	logFileString, ok := dat["log_dir"].(string)
+	if !ok {
+		log.Fatal("log_file is not a string")
+	}
+	err = os.MkdirAll(logFileString, 0755)
+	if err != nil {
+		log.Fatal("Failed to create log directory")
+	}
+	logFile, err := os.Create(logFileString + "/" + logName + ".log")
+	if err != nil {
+		log.Fatal("Failed to create log file")
+	}
+	loadConfig.LogFile = logFile
+	log.Println("log: " + logFileString + "/" + logName + ".log")
+
 	jwtKey, ok := dat["jwt_key"].(string)
 	if !ok {
-		log.Fatalf("jwt_key is not a string")
+		log.Fatal("jwt_key is not a string")
 	}
 	loadConfig.JwtKey = []byte(jwtKey)
 
 	db_user, ok := dat["db_user"].(string)
 	if !ok {
-		log.Fatalf("db_user is not a string")
+		log.Fatal("db_user is not a string")
 	}
 
 	db_password, ok := dat["db_password"].(string)
 	if !ok {
-		log.Fatalf("db_password is not a string")
+		log.Fatal("db_password is not a string")
 	}
 
 	db_host, ok := dat["db_host"].(string)
 	if !ok {
-		log.Fatalf("db_host is not a string")
+		log.Fatal("db_host is not a string")
 	}
 
 	db_name, ok := dat["db_name"].(string)
 	if !ok {
-		log.Fatalf("db_name is not a string")
+		log.Fatal("db_name is not a string")
 	}
 
 	log.Println("db user: " + db_user)

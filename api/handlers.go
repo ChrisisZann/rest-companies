@@ -67,6 +67,7 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 
 		i_amountOfEmployees, err := strconv.Atoi(r.FormValue("amount_of_employees"))
 		if err != nil {
+			a.cfg.Logger.Println("ERROR:", err)
 			log.Println("ERROR:", err)
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 			// http.Error(w, "bad argument", http.StatusBadRequest)
@@ -75,12 +76,14 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 
 		b_registered, err := strconv.ParseBool(registered)
 		if err != nil {
+			a.cfg.Logger.Println("ERROR:", err)
 			log.Println("ERROR:", err)
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 		}
 
 		err = a.cfg.Models.Company.CreateNewCompany(name, description, companyType, i_amountOfEmployees, b_registered)
 		if err != nil {
+			a.cfg.Logger.Println("ERROR:", err)
 			log.Println("ERROR:", err)
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 			return
@@ -126,6 +129,7 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 		case "amount_of_employees":
 			i_value, err := strconv.Atoi(r.FormValue("amount_of_employees"))
 			if err != nil {
+				a.cfg.Logger.Println("ERROR:", err)
 				log.Println("ERROR:", err)
 				_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 				// http.Error(w, "bad argument", http.StatusBadRequest)
@@ -139,6 +143,7 @@ func (a *api) auth_company(w http.ResponseWriter, r *http.Request) {
 		case "registered":
 			b_value, err := strconv.ParseBool(value)
 			if err != nil {
+				a.cfg.Logger.Println("ERROR:", err)
 				log.Println("ERROR:", err)
 				_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 			}
@@ -199,16 +204,19 @@ func (a *api) user(w http.ResponseWriter, r *http.Request) {
 
 		err = a.cfg.Models.Company.CreateNewUser(username, password)
 		if err != nil {
+			a.cfg.Logger.Println("ERROR:", err)
 			log.Println("ERROR:", err)
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 			return
 		}
 		token, err := GenerateJWT(username, a.cfg.JwtKey)
 		if err != nil {
+			a.cfg.Logger.Println("Failed to generate token")
 			log.Println("Failed to generate token")
 			return
 		}
 		log.Printf("Created token: %v for user: %v", token, username)
+		a.cfg.Logger.Printf("Created token: %v for user: %v", token, username)
 
 		e := events.Event{Type: "register", Payload: []byte(username)}
 		a.hub.PublishEventOnLocal(e)
@@ -241,12 +249,14 @@ func (a *api) login(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		if val, ok := ctx.Value("username").(string); ok {
 			log.Printf("user %s already authenticated", val)
+			a.cfg.Logger.Printf("user %s already authenticated", val)
 			_ = t.WriteJSON(w, http.StatusAccepted, "successful validation")
 			return
 		}
 
 		err = a.cfg.Models.Company.ValidateUser(username, password)
 		if err != nil {
+			a.cfg.Logger.Println("ERROR:", err)
 			log.Println("ERROR:", err)
 			_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 			return
@@ -278,14 +288,17 @@ func (a *api) Auth(next http.Handler) http.Handler {
 			http.Error(w, "Missing Tokenb", http.StatusUnauthorized)
 			return
 		}
-		// log.Println("Auth(): Authorization:", str_token)
+		// a.cfg.Logger.Println
+		log.Println("Auth(): Authorization:", str_token)
 
 		claims := &XmClaims{}
 
-		// log.Println("Auth(): Parsing XmClaims:", str_token)
+		// a.cfg.Logger.Println
+		log.Println("Auth(): Parsing XmClaims:", str_token)
 
 		claims, err := ValidateJWT(str_token, a.cfg.JwtKey)
 		if err != nil {
+			a.cfg.Logger.Println("error:", err)
 			log.Println("error:", err)
 			return
 		}
@@ -320,9 +333,9 @@ func GenerateJWT(username string, signingKey []byte) (string, error) {
 }
 
 func ValidateJWT(str_token string, privateKey []byte) (*XmClaims, error) {
-	// log.Println("ValidatingJWT")
-	// log.Println("str_token", str_token)
-	// log.Println("privateKey", string(privateKey))
+	log.Println("ValidatingJWT")
+	log.Println("str_token", str_token)
+	log.Println("privateKey", string(privateKey))
 
 	var token_only string
 	if strings.Contains(str_token, " ") {
@@ -344,7 +357,7 @@ func ValidateJWT(str_token string, privateKey []byte) (*XmClaims, error) {
 		return privateKey, nil
 	})
 	if err != nil {
-		log.Println("error in ValidateJWT() : ParseWithClaims()", err)
+		// log.Println("error in ValidateJWT() : ParseWithClaims()", err)
 		return nil, err
 	} else if !token.Valid {
 		return nil, errors.New("Invalid token")

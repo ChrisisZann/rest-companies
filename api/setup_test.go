@@ -13,13 +13,8 @@ func TestMain(m *testing.M) {
 
 	log.Println("initializing testApp")
 
-	initTestConfig, err := config.New("test")
-	if err != nil {
-		log.Fatal("failed to init config")
-	}
-
 	testApp = api{
-		cfg: initTestConfig,
+		cfg: config.New("test"),
 	}
 
 	os.Exit(m.Run())
