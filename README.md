@@ -40,7 +40,8 @@ example:
     "db_user": "dummy_username",
     "db_password": "dummy_password",
     "db_host": "dummy_hostname",
-    "db_name": "dummy_db_name"
+    "db_name": "dummy_db_name",
+    "log_dir": "/var/log/xm-companies"
 }
 ```
 
