@@ -24,13 +24,22 @@ func main() {
 	flag.Parse()
 	log.Println("Input config:", *cfgFile)
 
+	initializeConfig, err := config.New(*cfgFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	companies_api := api{
-		cfg: config.New(*cfgFile),
+		cfg: initializeConfig,
 		hub: events.NewHub(),
 	}
 
+	companies_api.cfg.Logger.Println("Finished Initialization")
+
 	companies_api.internalPublisher = events.NewPublisher(companies_api.hub)
 	go companies_api.hub.Run()
+
+	companies_api.cfg.Logger.Println("Started Event Publisher")
 
 	srv := &http.Server{
 		Addr:              port,
@@ -43,7 +52,8 @@ func main() {
 
 	log.Println("Starting web application on port", port)
 
-	err := srv.ListenAndServe()
+	companies_api.cfg.Logger.Println("Starting Service")
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}

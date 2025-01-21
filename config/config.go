@@ -3,6 +3,7 @@ package config
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -15,9 +16,10 @@ type Application struct {
 	Models *repository.Models
 	JwtKey []byte
 	SqlCfg *mysql.Config
+	Logger *log.Logger
 }
 
-type tempConfig struct {
+type inputConfig struct {
 	JwtKey []byte
 	SqlCfg *mysql.Config
 }
@@ -26,24 +28,38 @@ var instance *Application
 var once sync.Once
 var db *sql.DB
 
-func New(configFile string) *Application {
-	tempConfig := LoadConfig(configFile)
-	return GetInstance(tempConfig)
+func New(configFile string) (*Application, error) {
+	inputConfig := LoadConfig(configFile)
+	return GetInstance(inputConfig)
 }
 
-func GetInstance(t tempConfig) *Application {
+func GetInstance(ic inputConfig) (*Application, error) {
+
+	err := os.MkdirAll("/var/log/xm-companies/", 0755)
+	if err != nil {
+		fmt.Println("Failed to create log directory")
+		return nil, err
+	}
+
+	logFile, err := os.Create("/var/log/xm-companies/service.log")
+	if err != nil {
+		fmt.Println("Failed to create log file")
+		return nil, err
+	}
 
 	once.Do(func() {
 		instance = &Application{
-			Models: repository.New(connectToDB(*t.SqlCfg)),
-			JwtKey: t.JwtKey,
+			Models: repository.New(connectToDB(*ic.SqlCfg)),
+			JwtKey: ic.JwtKey,
+			Logger: log.New(logFile, "", log.Ldate|log.Ltime|log.Lshortfile),
 		}
 	})
-	return instance
+
+	return instance, nil
 }
 
-func LoadConfig(configFile string) tempConfig {
-	var temp tempConfig
+func LoadConfig(configFile string) inputConfig {
+	var loadConfig inputConfig
 
 	data, err := os.ReadFile(configFile)
 	if err != nil {
@@ -57,7 +73,7 @@ func LoadConfig(configFile string) tempConfig {
 	if !ok {
 		log.Fatalf("jwt_key is not a string")
 	}
-	temp.JwtKey = []byte(jwtKey)
+	loadConfig.JwtKey = []byte(jwtKey)
 
 	db_user, ok := dat["db_user"].(string)
 	if !ok {
@@ -84,7 +100,7 @@ func LoadConfig(configFile string) tempConfig {
 	log.Println("db host: " + db_host)
 	log.Println("db name: " + db_name)
 
-	temp.SqlCfg = &mysql.Config{
+	loadConfig.SqlCfg = &mysql.Config{
 		User:   db_user,
 		Passwd: db_password,
 		Net:    "tcp",
@@ -94,5 +110,5 @@ func LoadConfig(configFile string) tempConfig {
 	// Debug only, Bad practise :)
 	// log.Println("loaded jwt key:", a.JwtKey)
 
-	return temp
+	return loadConfig
 }
