@@ -2,9 +2,8 @@ package repository
 
 import (
 	"errors"
-	"log"
-
 	"github.com/google/uuid"
+	"log"
 )
 
 func (thisRepo *psqlRepo) CreateNewCompany(name, description, ct string, amountOfEmployees int, registered bool) error {

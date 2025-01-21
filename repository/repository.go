@@ -29,7 +29,7 @@ type psqlRepo struct {
 }
 
 // psqlRepo implements Repository
-func newPsqlRepo(conn *sql.DB) Repository {
+func NewPsqlRepo(conn *sql.DB) Repository {
 	return &psqlRepo{
 		DB: conn,
 	}

@@ -202,7 +202,7 @@ func (a *api) user(w http.ResponseWriter, r *http.Request) {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 
-		err = a.cfg.Models.Company.CreateNewUser(username, password)
+		err = a.cfg.Models.User.CreateNewUser(username, password)
 		if err != nil {
 			a.cfg.Logger.Println("ERROR:", err)
 			log.Println("ERROR:", err)
@@ -254,7 +254,7 @@ func (a *api) login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = a.cfg.Models.Company.ValidateUser(username, password)
+		err = a.cfg.Models.User.ValidateUser(username, password)
 		if err != nil {
 			a.cfg.Logger.Println("ERROR:", err)
 			log.Println("ERROR:", err)
