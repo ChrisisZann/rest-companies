@@ -106,7 +106,7 @@ curl -X GET "http://127.0.0.1:8888/company?name=<COMPANY_NAME>"
 Patch company field
 ```bash
 curl -X PATCH -H "Authorization: Bearer <your_token>"\
-"http::/127.0.0.1:8888/auth-company?name=<COMPANY_NAME>&field=<key>&value=<value>" 
+"http://127.0.0.1:8888/auth-company?name=<COMPANY_NAME>&field=<key>&value=<value>" 
 ```
 
 Delete company field
