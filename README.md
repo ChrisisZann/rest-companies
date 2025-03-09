@@ -12,8 +12,6 @@ a small service to create, patch, delete and get companies
 - Events
 - Testing Examples
 
-remove this
-
 ## Dependencies
 
 ```bash
