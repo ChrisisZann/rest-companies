@@ -1,4 +1,4 @@
-# XM companies service
+# Sample companies service
 
 a small service to create, patch, delete and get companies
 
