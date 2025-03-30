@@ -49,7 +49,7 @@ example:
 Download project:
 
 ```bash
-git clone https://github.com/chrisisZann/xm-companies.git
+git clone https://github.com/chrisisZann/rest-companies.git
 ```
 
 ## Run as docker container
